@@ -27,6 +27,9 @@ taskid = []
 taskdict = {}
 @app.route("/")
 def hello_world():
+    thr = threading.Thread(target=scheduler, args=(), kwargs={})
+    thr.start()
+    print('threadstarted')
     return {'status': 200, 'message': 'SUCCESS', 'data': []}
 @app.route("/settimer", methods=['POST'])
 def set_timer():
@@ -118,8 +121,8 @@ def delete_all():
         return {'status': 400, 'message': 'Method not allowed'}
         
 if __name__ == '__main__':
-    thr = threading.Thread(target=scheduler, args=(), kwargs={})
-    thr.start()
-    print('threadstarted')
+    # thr = threading.Thread(target=scheduler, args=(), kwargs={})
+    # thr.start()
+    # print('threadstarted')
     app.run(debug=False, host='0.0.0.0')
 
