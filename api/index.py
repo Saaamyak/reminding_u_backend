@@ -14,8 +14,8 @@ from twilio.rest import Client
 # db = client.ReminderApp
 # collection = db.tasks
 
-account_sid = os.environ.get('account_sid')
-auth_token = os.environ.get('auth_token')
+account_sid = "AC5e4990c3db2e05e0318a3c98c7f0e888"
+auth_token = "a3bc4182c1d563170db349cc869471bf"
 client = Client(account_sid, auth_token)
 
 
@@ -29,7 +29,9 @@ taskdict = {}
 def hello_world():
     thr = threading.Thread(target=scheduler, args=(), kwargs={})
     thr.start()
-    print('threadstarted')
+    
+
+
     return {'status': 200, 'message': 'SUCCESS', 'data': []}
 @app.route("/settimer", methods=['POST'])
 def set_timer():
@@ -40,16 +42,16 @@ def set_timer():
             timeanddate = request.json['timeanddate']
             
             x=call_timer(message, phonenumber, timeanddate)
-            print('initialx',x)
+            
             return {'status': 200, 'message': 'Success' , 'data':json.dumps({'id':str(x)})}
         except Exception as e:
             return {'status': 500, 'message': str(e) }
     else:
         return {'status': 400, 'message': 'Method not allowed'}
 def call_timer(message, phonenumber, timeanddate):
-    print(message, phonenumber, timeanddate)
+   
     mydate = datetime.datetime.fromtimestamp(int(timeanddate))
-    print(mydate)
+   
     myData = { "message": message, "phonenumber": phonenumber, "timeanddate": mydate }
 
     # x = collection.insert_one(myData)
@@ -70,14 +72,14 @@ def callto(message,phonenumber):
     to="+91" +str(phonenumber),
     from_="+17579976306"
     )
-    print(call.sid)
+    
 def scheduler():
     print("Scheduling Task")
     while True: 
         if len(taskid) > 0 : 
             curtask=taskdict[taskid[0]]
             curtime=datetime.datetime.now()
-            print("Printing time", curtime, account_sid, auth_token, curtask['timeanddate'])
+           
             if curtime>=curtask['timeanddate']:
                 callto(curtask['message'],curtask['phonenumber'])
                 # myquery = { "_id":  taskid[0] }
@@ -96,8 +98,7 @@ def delete_timer():
             # myquery = { "_id":  id }
 
             # collection.delete_one(myquery)
-            print(id,taskid)
-            print(taskdict)
+           
             curid=taskid.index(id)
             del taskdict[taskid[curid]]
             taskid.pop(curid)
@@ -121,8 +122,8 @@ def delete_all():
         return {'status': 400, 'message': 'Method not allowed'}
         
 if __name__ == '__main__':
-    # thr = threading.Thread(target=scheduler, args=(), kwargs={})
-    # thr.start()
-    # print('threadstarted')
+    thr = threading.Thread(target=scheduler, args=(), kwargs={})
+    thr.start()
+  
     app.run(debug=False, host='0.0.0.0')
 
