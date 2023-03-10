@@ -69,10 +69,12 @@ def callto(message,phonenumber):
     )
     print(call.sid)
 def scheduler():
+    print("Scheduling Task")
     while True: 
         if len(taskid) > 0 : 
             curtask=taskdict[taskid[0]]
             curtime=datetime.datetime.now()
+            print("Printing time", curtime, account_sid, auth_token, curtask['timeanddate'])
             if curtime>=curtask['timeanddate']:
                 callto(curtask['message'],curtask['phonenumber'])
                 # myquery = { "_id":  taskid[0] }
