@@ -9,13 +9,13 @@ import uuid
 import os
 from twilio.rest import Client
 
-import pymongo
-client = pymongo.MongoClient('localhost', 27017)
-db = client.ReminderApp
-collection = db.tasks
+# import pymongo
+# client = pymongo.MongoClient('localhost', 27017)
+# db = client.ReminderApp
+# collection = db.tasks
 
 account_sid = "AC5e4990c3db2e05e0318a3c98c7f0e888"
-auth_token = "3a28c4d61985c7c60f120b1d780cf87b"
+auth_token = "0bcb38d5edf0159d6a969c8c54d91fcf"
 client = Client(account_sid, auth_token)
 
 
@@ -54,23 +54,23 @@ def call_timer(message, phonenumber, timeanddate):
    
     myData = { "message": message, "phonenumber": phonenumber, "timeanddate": mydate }
 
-    x = collection.insert_one(myData)
-    # x=uuid.uuid4()
-    # taskdict[x]=myData
-    # taskid.append(x)
-    # taskid.sort(key=lambda x: taskdict[x]['timeanddate'].timestamp())
-    taskdict[x.inserted_id]=myData
-    taskid.append(x.inserted_id)
+    # x = collection.insert_one(myData)
+    x=uuid.uuid4()
+    taskdict[x]=myData
+    taskid.append(x)
     taskid.sort(key=lambda x: taskdict[x]['timeanddate'].timestamp())
-    return x.inserted_id
-    # return x
+    # taskdict[x.inserted_id]=myData
+    # taskid.append(x.inserted_id)
+    # taskid.sort(key=lambda x: taskdict[x]['timeanddate'].timestamp())
+    # return x.inserted_id
+    return x
 
 def callto(message,phonenumber):
     call = client.calls.create(
     twiml= "<Response><Say voice='Polly.Aditi'>"+str(message)+"</Say><Play>http://demo.twilio.com/docs/classic.mp3</Play></Response>",
     #twiml= '<Response><Say>Ahoy, World!</Say></Response>',
     to="+91" +str(phonenumber),
-    from_="+13184076182"
+    from_="+16822171724"
     )
     
 def scheduler():
@@ -93,11 +93,11 @@ def delete_timer():
     if request.method == 'POST':
         try:
             id = request.json['id']
-            # id = uuid.UUID(id)
-            id = ObjectId(id)
-            myquery = { "_id":  id }
+            id = uuid.UUID(id)
+            # id = ObjectId(id)
+            # myquery = { "_id":  id }
 
-            collection.delete_one(myquery)
+            # collection.delete_one(myquery)
            
             curid=taskid.index(id)
             del taskdict[taskid[curid]]
@@ -112,7 +112,7 @@ def delete_timer():
 def delete_all():
     if request.method == 'POST':
         try:
-            collection.delete_many({})
+            # collection.delete_many({})
             taskdict.clear()
             taskid.clear()
             return {'status': 200, 'message': 'Success' }
