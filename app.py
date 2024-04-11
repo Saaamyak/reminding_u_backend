@@ -15,7 +15,7 @@ from twilio.rest import Client
 # collection = db.tasks
 
 account_sid = "AC5e4990c3db2e05e0318a3c98c7f0e888"
-auth_token = "0bcb38d5edf0159d6a969c8c54d91fcf"
+auth_token = "f3cd5ae5c0dc77f4307bde8e9a9608bf"
 client = Client(account_sid, auth_token)
 
 
@@ -84,7 +84,7 @@ def scheduler():
                 callto(curtask['message'],curtask['phonenumber'])
                 myquery = { "_id":  taskid[0] }
 
-                collection.delete_one(myquery)
+                #collection.delete_one(myquery)
                 del taskdict[taskid[0]]
                 taskid.pop(0)
         time.sleep(1)
