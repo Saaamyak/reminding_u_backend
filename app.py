@@ -1,3 +1,4 @@
+import os
 from flask import Flask,request
 from flask_cors import CORS
 import threading
@@ -14,15 +15,19 @@ from twilio.rest import Client
 # db = client.ReminderApp
 # collection = db.tasks
 
-account_sid = "AC5e4990c3db2e05e0318a3c98c7f0e888"
-auth_token = "f3cd5ae5c0dc77f4307bde8e9a9608bf"
-client = Client(account_sid, auth_token)
+
+# Access environment variables
+twilio_account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+twilio_auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+client = Client(twilio_account_sid, twilio_auth_token)
 
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+cors_origins = os.getenv('CORS_ORIGINS')
+# Set up CORS
+cors = CORS(app, resources={r"/*": {"origins": cors_origins}})
 
 taskid = []
 taskdict = {}
