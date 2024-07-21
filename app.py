@@ -40,8 +40,8 @@ def set_timer():
             message = request.json['message']
             phonenumber = request.json['phonenumber']
             timeanddate = request.json['timeanddate']
-            
             x=call_timer(message, phonenumber, timeanddate)
+            print(x)
             
             return {'status': 200, 'message': 'Success' , 'data':json.dumps({'id':str(x)})}
         except Exception as e:
@@ -81,6 +81,7 @@ def scheduler():
             curtime=datetime.datetime.now()
            
             if curtime>=curtask['timeanddate']:
+                print("calling callTo funct()")
                 callto(curtask['message'],curtask['phonenumber'])
                 myquery = { "_id":  taskid[0] }
 
